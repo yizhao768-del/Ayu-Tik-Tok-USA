@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TikTok • US Onboarding Cash Wheel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #f9fafb;
+      background: radial-gradient(circle at top, #020617 0, #020617 40%, #000000 100%);
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* TikTok-style sci-fi animated background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -40%;
+      background: conic-gradient(
+        from 20deg,
+        rgba(254, 44, 85, 0.24),
+        rgba(37, 244, 238, 0.28),
+        rgba(56, 189, 248, 0.35),
+        rgba(254, 44, 85, 0.35),
+        rgba(15, 23, 42, 0.98)
+      );
+      mix-blend-mode: screen;
+      opacity: 0.9;
+      animation: spinGlow 38s linear infinite;
+      z-index: -4;
+      pointer-events: none;
+    }
+
+    @keyframes spinGlow {
+      0% { transform: rotate(0deg) scale(1); }
+      100% { transform: rotate(360deg) scale(1.03); }
+    }
+
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    .orb {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      filter: blur(6px);
+      opacity: 0.9;
+      animation: floatOrb 22s ease-in-out infinite alternate;
+    }
+
+    .orb--pink {
+      background: radial-gradient(circle, #fe2c55 0%, rgba(254, 44, 85, 0) 70%);
+      top: -70px;
+      left: -30px;
+    }
+
+    .orb--cyan {
+      background: radial-gradient(circle, #25f4ee 0%, rgba(37, 244, 238, 0) 70%);
+      bottom: -120px;
+      right: -70px;
+      animation-duration: 26s;
+    }
+
+    .orb--violet {
+      background: radial-gradient(circle, #818cf8 0%, rgba(129, 140, 248, 0) 70%);
+      top: 40%;
+      left: 65%;
+      animation-duration: 30s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(40px, -30px, 0) scale(1.05); }
+      100% { transform: translate3d(-30px, 40px, 0) scale(1.1); }
+    }
+
+    .grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(
+          rgba(148, 163, 184, 0.18) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(148, 163, 184, 0.18) 1px,
+          transparent 1px
+        );
+      background-size: 38px 38px;
+      mix-blend-mode: soft-light;
+      opacity: 0.5;
+      animation: driftGrid 40s linear infinite;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    @keyframes driftGrid {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-80px, -80px, 0); }
+    }
+
+    .scanline {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(249, 250, 251, 0.15) 0,
+        rgba(249, 250, 251, 0.15) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      mix-blend-mode: soft-light;
+      opacity: 0.2;
+      animation: scan 5s linear infinite;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    @keyframes scan {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 140px; }
+    }
+
+    .light-beam {
+      position: fixed;
+      width: 160%;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(37, 244, 238, 0.6),
+        rgba(254, 44, 85, 0.7),
+        transparent
+      );
+      opacity: 0.65;
+      transform: rotate(-18deg);
+      top: -10%;
+      left: -30%;
+      animation: sweep 16s linear infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .light-beam--slow {
+      animation-duration: 24s;
+      opacity: 0.5;
+      transform: rotate(-25deg);
+    }
+
+    @keyframes sweep {
+      0% { transform: translate3d(-30%, -10%, 0) rotate(-18deg); }
+      100% { transform: translate3d(30%, 120%, 0) rotate(-18deg); }
+    }
+
+    /* Subtle US flag-style overlay */
+    .us-flag-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background-image:
+        linear-gradient(
+          to bottom,
+          rgba(191, 18, 60, 0.5) 0,
+          rgba(191, 18, 60, 0.5) 6%,
+          transparent 6%,
+          transparent 12%
+        ),
+        radial-gradient(
+          circle at 12% 18%,
+          rgba(15, 23, 42, 0.9) 0,
+          rgba(15, 23, 42, 0.9) 30%,
+          transparent 35%
+        );
+      background-size: 100% 14%, 40% 40%;
+      mix-blend-mode: soft-light;
+      opacity: 0.25;
+    }
+
+    .outer {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 16px 10px 40px;
+    }
+
+    .card {
+      width: 100%;
+      border-radius: 22px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), #020617 60%);
+      box-shadow:
+        0 0 0 1px rgba(148, 163, 184, 0.5),
+        0 30px 80px rgba(0, 0, 0, 0.95);
+      padding: 20px 16px 20px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      animation: cardIn 0.7s ease-out;
+      color: #f9fafb;
+      margin-top: 12px;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(254, 44, 85, 0.24), transparent 65%);
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translate3d(0, 26px, 0); }
+      to   { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .logo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(3, 7, 18, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fe2c55, #25f4ee);
+      box-shadow: 0 0 12px rgba(254, 44, 85, 0.9);
+    }
+
+    .title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+      text-transform: uppercase;
+    }
+
+    .title span.dot {
+      color: #fe2c55;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #d1d5f9;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* Welcome step */
+    .welcome {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .welcome-lead {
+      font-size: 0.98rem;
+      color: #e5e7eb;
+      margin-bottom: 8px;
+    }
+
+    .welcome-text {
+      font-size: 0.9rem;
+      color: #cbd5ff;
+      margin-bottom: 12px;
+    }
+
+    .welcome-text strong {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    .welcome-list {
+      list-style: none;
+      font-size: 0.86rem;
+      color: #d1d5db;
+      margin: 6px 0 14px;
+    }
+
+    .welcome-list li {
+      margin-bottom: 4px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .primary-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 11px 20px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: linear-gradient(120deg, #fe2c55, #25f4ee);
+      color: #ffffff;
+      cursor: pointer;
+      box-shadow:
+        0 0 0 1px rgba(248, 250, 252, 0.4),
+        0 14px 30px rgba(0, 0, 0, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      animation: pulseBtn 1.7s ease-in-out infinite;
+    }
+
+    .primary-btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      animation: none;
+    }
+
+    .primary-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.5),
+        transparent,
+        rgba(255, 255, 255, 0.5)
+      );
+      opacity: 0;
+      transform: translateX(-80%);
+      pointer-events: none;
+    }
+
+    .primary-btn:not([disabled]):hover::before {
+      opacity: 1;
+      animation: shimmer 1.2s linear;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-80%); }
+      100% { transform: translateX(80%); }
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { box-shadow: 0 14px 30px rgba(0, 0, 0, 1); }
+      50%      { box-shadow: 0 18px 40px rgba(0, 0, 0, 1); }
+    }
+
+    /* Wheel step */
+    .wheel-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .wheel-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .wheel-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pointer {
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 20px solid #f97316;
+      filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.9));
+      margin-bottom: 4px;
+    }
+
+    .wheel {
+      position: relative;
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          from -90deg,
+          rgba(15, 23, 42, 1) 0deg 36deg,
+          rgba(24, 35, 58, 1) 36deg 72deg,
+          rgba(15, 23, 42, 1) 72deg 108deg,
+          rgba(24, 35, 58, 1) 108deg 144deg,
+          rgba(15, 23, 42, 1) 144deg 180deg,
+          rgba(24, 35, 58, 1) 180deg 216deg,
+          rgba(15, 23, 42, 1) 216deg 252deg,
+          rgba(24, 35, 58, 1) 252deg 288deg,
+          rgba(15, 23, 42, 1) 288deg 324deg,
+          rgba(24, 35, 58, 1) 324deg 360deg
+        );
+      box-shadow:
+        0 0 0 2px rgba(148, 163, 184, 0.8),
+        0 0 0 6px rgba(15, 23, 42, 1),
+        0 18px 45px rgba(0, 0, 0, 1);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 4.8s cubic-bezier(0.19, 0.9, 0.22, 1);
+    }
+
+    /* Larger wheel */
+    .wheel {
+      width: 290px;
+      height: 290px;
+    }
+
+    @media (min-width: 768px) {
+      .wheel {
+        width: 330px;
+        height: 330px;
+      }
+    }
+
+    .wheel-inner {
+      position: relative;
+      width: 86%;
+      height: 86%;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.6));
+      box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.8);
+    }
+
+    .wheel-inner::before {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border-radius: 50%;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      opacity: 0.75;
+    }
+
+    .segment-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f9fafb;
+      text-shadow:
+        0 0 6px rgba(15, 23, 42, 0.9),
+        0 0 10px rgba(0, 0, 0, 0.9);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .wheel-center-cap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, #f9fafb, #e5e7eb 40%, #020617 100%);
+      box-shadow:
+        0 0 0 3px rgba(15, 23, 42, 1),
+        0 12px 24px rgba(0, 0, 0, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .wheel-center-cap span {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #020617;
+    }
+
+    .wheel-center-cap strong {
+      font-size: 0.74rem;
+      color: #020617;
+    }
+
+    .wheel-caption {
+      font-size: 0.86rem;
+      color: #d1d5db;
+      text-align: center;
+      max-width: 260px;
+    }
+
+    .wheel-caption strong {
+      color: #fbbf24;
+    }
+
+    .wheel-cta {
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .secondary-text {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 6px;
+    }
+
+    .info-panel {
+      font-size: 0.88rem;
+      color: #d1d5ff;
+      padding: 4px 2px;
+    }
+
+    .info-panel p {
+      margin-bottom: 6px;
+    }
+
+    .info-panel strong {
+      color: #e5e7eb;
+    }
+
+    /* Result step */
+    .result-screen {
+      padding: 16px 4px 8px;
+      text-align: center;
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.96);
+      font-size: 0.86rem;
+      margin-bottom: 10px;
+    }
+
+    .result-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .result-amount {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+      margin-bottom: 10px;
+    }
+
+    .result-copy {
+      font-size: 0.9rem;
+      color: #d1d5db;
+      max-width: 420px;
+      margin: 0 auto 14px;
+    }
+
+    .result-copy strong {
+      color: #e5e7eb;
+    }
+
+    .secondary-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f9fafb;
+      color: #020617;
+      cursor: pointer;
+      box-shadow:
+        0 0 0 1px rgba(148, 163, 184, 0.9),
+        0 12px 26px rgba(0, 0, 0, 1);
+    }
+
+    .secondary-btn:hover {
+      filter: brightness(0.96);
+    }
+
+    .result-note {
+      font-size: 0.86rem;
+      color: #cbd5ff;
+      margin-top: 10px;
+    }
+
+    /* Repeat step */
+    .simple-screen {
+      padding: 18px 6px 8px;
+      text-align: center;
+      font-size: 0.96rem;
+      color: #e5e7ff;
+    }
+
+    .simple-screen strong {
+      font-weight: 700;
+      color: #fbbf24;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 8px;
+      height: 14px;
+      border-radius: 2px;
+      opacity: 0.95;
+      pointer-events: none;
+      z-index: 50;
+      animation: confettiFall 3.2s linear forwards;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translate3d(0, 0, 0) rotateZ(0deg); }
+      100% { transform: translate3d(0, 110vh, 0) rotateZ(360deg); }
+    }
+
+    /* US Eastern Time widget */
+    .time-widget {
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #e5e7eb;
+      z-index: 10;
+    }
+
+    .time-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+    }
+
+    .time-label {
+      opacity: 0.9;
+    }
+
+    .time-value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated background layers -->
+  <div class="bg-orbs">
+    <div class="orb orb--pink"></div>
+    <div class="orb orb--cyan"></div>
+    <div class="orb orb--violet"></div>
+  </div>
+  <div class="grid"></div>
+  <div class="scanline"></div>
+  <div class="us-flag-layer"></div>
+  <div class="light-beam"></div>
+  <div class="light-beam light-beam--slow"></div>
+
+  <div class="outer">
+    <div class="card">
+      <div class="card-inner">
+        <header class="header">
+          <div class="logo-pill">
+            <div class="logo-dot"></div>
+            <span>TIKTOK • US ONBOARDING</span>
+          </div>
+          <h1 class="title">
+            TIKTOK<span class="dot"> • </span>ONBOARDING CASH WHEEL
+          </h1>
+          <p class="subtitle">
+            Step into your new role with a confident first reward.
+          </p>
+        </header>
+
+        <!-- STEP 1: Welcome -->
+        <section id="step-welcome" class="step active">
+          <div class="welcome">
+            <p class="welcome-lead">
+              Dear intern partner, welcome to our TikTok onboarding benefit event.
+            </p>
+            <p class="welcome-text">
+              In this draw, you may receive up to <strong>US$ 40</strong> in onboarding rewards.
+            </p>
+            <ul class="welcome-list">
+              <li>• Tap the button below to confirm your participation.</li>
+              <li>• You will be taken to the reward wheel screen.</li>
+              <li>• Once you spin, your reward will be locked in on this device.</li>
+            </ul>
+            <div class="center">
+              <button id="goToWheelBtn" class="primary-btn">
+                <span>Begin your reward draw</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 2: Wheel -->
+        <section id="step-wheel" class="step">
+          <div class="wheel-layout">
+            <div class="wheel-panel">
+              <div class="wheel-wrapper">
+                <div class="pointer"></div>
+                <div class="wheel" id="wheel">
+                  <div class="wheel-inner">
+                    <!-- Labels will be positioned via JS -->
+                    <div class="segment-label">US$ 3</div>
+                    <div class="segment-label">US$ 5</div>
+                    <div class="segment-label">US$ 7</div>
+                    <div class="segment-label">US$ 10</div>
+                    <div class="segment-label">US$ 15</div>
+                    <div class="segment-label">US$ 20</div>
+                    <div class="segment-label">US$ 25</div>
+                    <div class="segment-label">US$ 30</div>
+                    <div class="segment-label">US$ 35</div>
+                    <div class="segment-label">US$ 40</div>
+                    <div class="wheel-center-cap">
+                      <span>TIKTOK</span>
+                      <strong>REWARDS</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="wheel-caption">
+                Tap the button below to spin the wheel. <strong>Your final reward will appear on the next screen.</strong>
+              </p>
+              <div class="wheel-cta">
+                <button id="spinBtn" class="primary-btn">
+                  <span>Spin and reveal</span>
+                </button>
+                <p class="secondary-text">
+                  Spin time is slightly extended to build a stronger sense of ceremony.
+                </p>
+              </div>
+            </div>
+
+            <div class="info-panel">
+              <p>
+                Once the wheel stops, your onboarding cash reward will be displayed on the result screen.
+                Please follow your internal instructions to contact your personal concierge on Telegram
+                and record your result.
+              </p>
+              <p class="secondary-text">
+                For fairness, each person may complete this cash wheel once per device.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 3: Result -->
+        <section id="step-result" class="step">
+          <div class="result-screen">
+            <div class="result-badge">
+              <span>🎉</span>
+              <span>Reward confirmed</span>
+            </div>
+            <h2 class="result-title">Your onboarding reward is:</h2>
+            <p class="result-amount">US$ 7</p>
+            <p class="result-copy">
+              Please contact your personal concierge on Telegram and let them know that your onboarding
+              cash reward is <strong>US$ 7</strong>. They will guide you through the remaining steps so you
+              can complete the required tasks and claim your reward in line with the programme rules.
+            </p>
+            <button id="confirmResultBtn" class="secondary-btn">
+              I’ve noted my reward
+            </button>
+            <p id="resultNote" class="result-note" style="display: none;">
+              Thank you. This device will now remember that your onboarding cash reward has been confirmed as US$ 7.
+            </p>
+          </div>
+        </section>
+
+        <!-- STEP 4: Repeat visit -->
+        <section id="step-repeat" class="step">
+          <div class="simple-screen">
+            <p>
+              You have already completed this US onboarding cash reward draw on this device.
+              <br /><br />
+              Your confirmed reward for this activity is:
+              <br />
+              <strong>US$ 7</strong>
+              <br /><br />
+              Please contact your personal concierge on Telegram (if you have not done so already)
+              to record your reward and follow the remaining steps to claim it.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- US Eastern Time widget -->
+  <div class="time-widget">
+    <div class="time-dot"></div>
+    <div class="time-label">US Eastern Time</div>
+    <div id="timeValue" class="time-value">--:--:--</div>
+  </div>
+
+  <script>
+    // Local storage key for US cash wheel ("only once" logic)
+    const DRAW_STATE_KEY = "onboardCashUS_drawStatus_v2";
+
+    const steps = document.querySelectorAll(".step");
+    function setActiveStep(id) {
+      steps.forEach((s) => s.classList.toggle("active", s.id === id));
+    }
+
+    const wheel = document.getElementById("wheel");
+    const spinBtn = document.getElementById("spinBtn");
+    const goToWheelBtn = document.getElementById("goToWheelBtn");
+    const confirmResultBtn = document.getElementById("confirmResultBtn");
+    const resultNote = document.getElementById("resultNote");
+
+    const prizes = [
+      "US$ 3",
+      "US$ 5",
+      "US$ 7",
+      "US$ 10",
+      "US$ 15",
+      "US$ 20",
+      "US$ 25",
+      "US$ 30",
+      "US$ 35",
+      "US$ 40"
+    ];
+
+    const winningIndex = 2; // US$ 7
+    const spinDuration = 4800; // longer spin (ms)
+
+    function setupWheelLabels() {
+      const labels = document.querySelectorAll(".segment-label");
+      const segmentAngle = 360 / prizes.length;
+
+      labels.forEach((label, index) => {
+        label.textContent = prizes[index];
+        const angle = -90 + index * segmentAngle;
+        label.style.transform =
+          "translate(-50%, -50%) rotate(" +
+          angle +
+          "deg) translate(0, -42%) rotate(" +
+          -angle +
+          "deg)";
+      });
+    }
+
+    function launchConfetti() {
+      const colors = ["#fe2c55", "#25f4ee", "#ffffff", "#facc15"];
+      const pieces = 90;
+      for (let i = 0; i < pieces; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        c.style.left = Math.random() * 100 + "vw";
+        const delay = Math.random() * 0.7;
+        const duration = 2.6 + Math.random() * 1.1;
+        c.style.animationDelay = delay + "s";
+        c.style.animationDuration = duration + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), (duration + delay + 0.6) * 1000);
+      }
+    }
+
+    function startSpin() {
+      spinBtn.disabled = true;
+
+      // Calculate final rotation so that the winning segment (US$ 7) lands at the top pointer
+      const segmentAngle = 360 / prizes.length;
+      const spins = 5; // number of full turns
+      const finalRotation = spins * 360 - winningIndex * segmentAngle;
+
+      // Keep wheel screen visible as the "waiting" animation
+      wheel.style.transform = "rotate(" + finalRotation + "deg)";
+
+      // Mark as completed in localStorage
+      localStorage.setItem(DRAW_STATE_KEY, "done");
+
+      // After the spin, go straight to the result screen
+      setTimeout(() => {
+        setActiveStep("step-result");
+        launchConfetti();
+      }, spinDuration + 200);
+    }
+
+    function handleConfirmResult() {
+      confirmResultBtn.disabled = true;
+      resultNote.style.display = "block";
+    }
+
+    // US Eastern Time clock
+    function updateEasternTime() {
+      const timeEl = document.getElementById("timeValue");
+      if (!timeEl) return;
+      const now = new Date();
+      const options = {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+        timeZone: "America/New_York"
+      };
+      timeEl.textContent = now.toLocaleTimeString("en-US", options);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const state = localStorage.getItem(DRAW_STATE_KEY);
+      if (state === "done") {
+        setActiveStep("step-repeat");
+      } else {
+        setActiveStep("step-welcome");
+      }
+
+      setupWheelLabels();
+
+      if (goToWheelBtn) {
+        goToWheelBtn.addEventListener("click", () => {
+          setActiveStep("step-wheel");
+        });
+      }
+
+      if (spinBtn) {
+        spinBtn.addEventListener("click", startSpin);
+      }
+
+      if (confirmResultBtn) {
+        confirmResultBtn.addEventListener("click", handleConfirmResult);
+      }
+
+      updateEasternTime();
+      setInterval(updateEasternTime, 1000);
+    });
+  </script>
+</body>
+</html>

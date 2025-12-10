@@ -488,7 +488,7 @@
       top: 50%;
       left: 50%;
       transform-origin: 0 0;
-      font-size: 0.9rem;
+      font-size: 1rem;          /* bigger amount text */
       font-weight: 700;
       color: #f9fafb;
       text-shadow:
@@ -544,12 +544,6 @@
     .wheel-cta {
       margin-top: 8px;
       text-align: center;
-    }
-
-    .secondary-text {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 6px;
     }
 
     .info-panel {
@@ -786,9 +780,6 @@
                 <button id="spinBtn" class="primary-btn">
                   <span>Spin and reveal</span>
                 </button>
-                <p class="secondary-text">
-                  Spin time is slightly extended to build a stronger sense of ceremony.
-                </p>
               </div>
             </div>
 
@@ -856,7 +847,7 @@
 
   <script>
     // Local storage key for US cash wheel ("only once" logic)
-    const DRAW_STATE_KEY = "onboardCashUS_drawStatus_v2";
+    const DRAW_STATE_KEY = "onboardCashUS_drawStatus_v3";
 
     const steps = document.querySelectorAll(".step");
     function setActiveStep(id) {
@@ -892,10 +883,11 @@
       labels.forEach((label, index) => {
         label.textContent = prizes[index];
         const angle = -90 + index * segmentAngle;
+        // Move labels稍微靠外一点，保证金额清楚
         label.style.transform =
           "translate(-50%, -50%) rotate(" +
           angle +
-          "deg) translate(0, -42%) rotate(" +
+          "deg) translate(0, -44%) rotate(" +
           -angle +
           "deg)";
       });
@@ -921,18 +913,16 @@
     function startSpin() {
       spinBtn.disabled = true;
 
-      // Calculate final rotation so that the winning segment (US$ 7) lands at the top pointer
       const segmentAngle = 360 / prizes.length;
       const spins = 5; // number of full turns
       const finalRotation = spins * 360 - winningIndex * segmentAngle;
 
-      // Keep wheel screen visible as the "waiting" animation
+      // waiting 动画就是转盘自己转
       wheel.style.transform = "rotate(" + finalRotation + "deg)";
 
-      // Mark as completed in localStorage
+      // 标记只抽一次
       localStorage.setItem(DRAW_STATE_KEY, "done");
 
-      // After the spin, go straight to the result screen
       setTimeout(() => {
         setActiveStep("step-result");
         launchConfetti();

@@ -452,7 +452,6 @@
       transition: transform 4.8s cubic-bezier(0.19, 0.9, 0.22, 1);
     }
 
-    /* Larger wheel */
     .wheel {
       width: 290px;
       height: 290px;
@@ -488,7 +487,7 @@
       top: 50%;
       left: 50%;
       transform-origin: 0 0;
-      font-size: 1rem;          /* bigger amount text */
+      font-size: 1rem;
       font-weight: 700;
       color: #f9fafb;
       text-shadow:
@@ -732,7 +731,7 @@
               Dear intern partner, welcome to our TikTok onboarding benefit event.
             </p>
             <p class="welcome-text">
-              In this draw, you may receive up to <strong>US$ 40</strong> in onboarding rewards.
+              In this draw, you may receive up to <strong>$ 40</strong> in onboarding rewards.
             </p>
             <ul class="welcome-list">
               <li>• Tap the button below to confirm your participation.</li>
@@ -756,16 +755,16 @@
                 <div class="wheel" id="wheel">
                   <div class="wheel-inner">
                     <!-- Labels will be positioned via JS -->
-                    <div class="segment-label">US$ 3</div>
-                    <div class="segment-label">US$ 5</div>
-                    <div class="segment-label">US$ 7</div>
-                    <div class="segment-label">US$ 10</div>
-                    <div class="segment-label">US$ 15</div>
-                    <div class="segment-label">US$ 20</div>
-                    <div class="segment-label">US$ 25</div>
-                    <div class="segment-label">US$ 30</div>
-                    <div class="segment-label">US$ 35</div>
-                    <div class="segment-label">US$ 40</div>
+                    <div class="segment-label">$ 3</div>
+                    <div class="segment-label">$ 5</div>
+                    <div class="segment-label">$ 7</div>
+                    <div class="segment-label">$ 10</div>
+                    <div class="segment-label">$ 15</div>
+                    <div class="segment-label">$ 20</div>
+                    <div class="segment-label">$ 25</div>
+                    <div class="segment-label">$ 30</div>
+                    <div class="segment-label">$ 35</div>
+                    <div class="segment-label">$ 40</div>
                     <div class="wheel-center-cap">
                       <span>TIKTOK</span>
                       <strong>REWARDS</strong>
@@ -804,17 +803,17 @@
               <span>Reward confirmed</span>
             </div>
             <h2 class="result-title">Your onboarding reward is:</h2>
-            <p class="result-amount">US$ 7</p>
+            <p class="result-amount">$ 10</p>
             <p class="result-copy">
               Please contact your personal concierge on Telegram and let them know that your onboarding
-              cash reward is <strong>US$ 7</strong>. They will guide you through the remaining steps so you
+              cash reward is <strong>$ 10</strong>. They will guide you through the remaining steps so you
               can complete the required tasks and claim your reward in line with the programme rules.
             </p>
             <button id="confirmResultBtn" class="secondary-btn">
               I’ve noted my reward
             </button>
             <p id="resultNote" class="result-note" style="display: none;">
-              Thank you. This device will now remember that your onboarding cash reward has been confirmed as US$ 7.
+              Your reward on this device is $ 10.
             </p>
           </div>
         </section>
@@ -827,7 +826,7 @@
               <br /><br />
               Your confirmed reward for this activity is:
               <br />
-              <strong>US$ 7</strong>
+              <strong>$ 10</strong>
               <br /><br />
               Please contact your personal concierge on Telegram (if you have not done so already)
               to record your reward and follow the remaining steps to claim it.
@@ -847,7 +846,7 @@
 
   <script>
     // Local storage key for US cash wheel ("only once" logic)
-    const DRAW_STATE_KEY = "onboardCashUS_drawStatus_v3";
+    const DRAW_STATE_KEY = "onboardCashUS_drawStatus_v4";
 
     const steps = document.querySelectorAll(".step");
     function setActiveStep(id) {
@@ -861,20 +860,21 @@
     const resultNote = document.getElementById("resultNote");
 
     const prizes = [
-      "US$ 3",
-      "US$ 5",
-      "US$ 7",
-      "US$ 10",
-      "US$ 15",
-      "US$ 20",
-      "US$ 25",
-      "US$ 30",
-      "US$ 35",
-      "US$ 40"
+      "$ 3",
+      "$ 5",
+      "$ 7",
+      "$ 10",
+      "$ 15",
+      "$ 20",
+      "$ 25",
+      "$ 30",
+      "$ 35",
+      "$ 40"
     ];
 
-    const winningIndex = 2; // US$ 7
-    const spinDuration = 4800; // longer spin (ms)
+    // index 3 -> $ 10
+    const winningIndex = 3;
+    const spinDuration = 4800; // ms
 
     function setupWheelLabels() {
       const labels = document.querySelectorAll(".segment-label");
@@ -883,7 +883,6 @@
       labels.forEach((label, index) => {
         label.textContent = prizes[index];
         const angle = -90 + index * segmentAngle;
-        // Move labels稍微靠外一点，保证金额清楚
         label.style.transform =
           "translate(-50%, -50%) rotate(" +
           angle +
@@ -914,13 +913,13 @@
       spinBtn.disabled = true;
 
       const segmentAngle = 360 / prizes.length;
-      const spins = 5; // number of full turns
+      const spins = 5;
       const finalRotation = spins * 360 - winningIndex * segmentAngle;
 
-      // waiting 动画就是转盘自己转
+      // Wheel itself is the waiting animation
       wheel.style.transform = "rotate(" + finalRotation + "deg)";
 
-      // 标记只抽一次
+      // Mark as completed
       localStorage.setItem(DRAW_STATE_KEY, "done");
 
       setTimeout(() => {
